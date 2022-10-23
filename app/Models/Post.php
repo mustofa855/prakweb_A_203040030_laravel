@@ -1,39 +1,10 @@
 <?php
 
-use App\Models\Post;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
+namespace App\Models;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', function () {
-    return  view('home', [
-        "title" => "Home"
-    ]);
-});
-
-Route::get('/about',function(){
-    return  view('about', [
-        "title" => "About",
-        "name" => "Mustofa Firdaus",
-        "email" => "mustofafirdaus01@gmail.com",
-        "image" => "mustofa.jfif"
-    ]);
-});
-
-
-
-Route::get('/blog',function(){
-    $blog_posts = [
+class Post
+{
+    private static $blog_posts = [
         [
             "title" => "Judul Post Pertama",
             "slug" => "judul-post-pertama",
@@ -55,13 +26,17 @@ Route::get('/blog',function(){
             suscipit quia dolorem, quaerat nemo, itaque dolor excepturi rem delectus accusantium expedita architecto exercitationem minima laborum commodi sapiente 
             illum temporibus voluptatum? Placeat iste incidunt neque beatae ut enim perferendis est facere soluta, nam consectetur modi ratione perspiciatis recusandae necessitatibus 
             numquam, nulla molestiae illum assumenda officia? Debitis dolorem maxime exercitationem laboriosam aliquid dolore rem pariatur libero nostrum corporis."
-        ],
+        ]
     ];
-    return  view('posts', [
-        "title" => "Posts",
-        "posts" => $blog_posts
-    ]);
-});
 
-Route::get('/posts',[PostController::class, 'index']);
-Route::get('posts/{slug}', [PostController::class, 'show']);
+    public static function all()
+    {
+        return collect(self::$blog_posts);
+    }
+
+    public static function find($slug)
+    {
+        $posts = static::all();
+        return $posts->firstWhere('slug', $slug);
+    }
+}
